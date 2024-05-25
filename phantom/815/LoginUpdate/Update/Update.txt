@@ -1,0 +1,6 @@
+[main]
+count=1
+url=https://yashior.github.io/test/phantom/815/update/
+[update]
+file_0=text.zip
+md5_0=bafe11d0f2c0e9b4cda1ff788077e23c
