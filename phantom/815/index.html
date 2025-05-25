@@ -44,7 +44,7 @@
 </head>
 <body>
   <h1>LINEAGE 掉落查詢</h1>
-  <input type="text" id="keyword" placeholder="請輸入關鍵字（備註 note）">
+  <input type="text" id="keyword" placeholder="請輸入備註文字（note）">
   <button onclick="search()">查詢</button>
 
   <div id="result"></div>
@@ -60,32 +60,41 @@
       const resultDiv = document.getElementById("result");
       resultDiv.innerHTML = "查詢中...";
 
-      const { data, error } = await supabase
+      // 1️⃣ 查詢 droplist
+      const { data: dropData, error: dropError } = await supabase
         .from("droplist")
         .select("*")
         .ilike("note", `%${keyword}%`);
 
-      if (error) {
-        resultDiv.innerHTML = "<pre style='color:red;'>" + JSON.stringify(error, null, 2) + "</pre>";
-        console.error(error);
+      if (dropError) {
+        resultDiv.innerHTML = "<pre style='color:red;'>" + JSON.stringify(dropError, null, 2) + "</pre>";
         return;
       }
 
-      if (data.length === 0) {
+      if (dropData.length === 0) {
         resultDiv.innerHTML = "<p>查無資料</p>";
         return;
       }
 
-      let html = "<table><tr><th>怪物ID</th><th>物品ID</th><th>掉落數量</th><th>掉落率</th><th>備註</th></tr>";
-      data.forEach(row => {
+      // 2️⃣ 查詢 npc 對照表
+      const { data: npcData, error: npcError } = await supabase
+        .from("npc")
+        .select("npcid, name");
+
+      const npcMap = new Map();
+      if (npcData) {
+        npcData.forEach(npc => {
+          npcMap.set(npc.npcid, npc.name);
+        });
+      }
+
+      // 3️⃣ 顯示查詢結果
+      let html = "<table><tr><th>怪物名稱</th><th>物品ID</th><th>掉落率</th><th>備註</th></tr>";
+      dropData.forEach(row => {
+        const mobName = npcMap.get(row.mobid) || `ID:${row.mobid}`;
         html += `<tr>
-                   <td>${row.mobid}</td>
+                   <td>${mobName}</td>
                    <td>${row.itemid}</td>
-                   <!--
-                   <tr>
-                   <td>${row.min} - ${row.max}</td>
-                   </tr>
-                   -->
                    <td>${(row.chance / 10000).toFixed(2)}%</td>
                    <td>${row.note ?? ""}</td>
                  </tr>`;
@@ -96,4 +105,3 @@
   </script>
 </body>
 </html>
-
