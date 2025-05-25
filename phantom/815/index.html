@@ -7,10 +7,10 @@
   <style>
     body {
       font-family: "Microsoft JhengHei", sans-serif;
-      text-align: center;
-      padding: 50px;
       background-color: #111;
-      color: #fff;
+      color: white;
+      text-align: center;
+      padding: 40px;
     }
 
     input, button {
@@ -18,30 +18,23 @@
       font-size: 16px;
       margin: 10px;
       border-radius: 5px;
-      border: none;
-    }
-
-    button {
-      background-color: #007bff;
-      color: white;
-      cursor: pointer;
     }
 
     table {
-      margin: 30px auto;
+      margin: 20px auto;
       border-collapse: collapse;
-      width: 90%;
       background-color: white;
       color: black;
+      width: 90%;
     }
 
     th, td {
-      padding: 10px;
+      padding: 8px 12px;
       border: 1px solid #ccc;
     }
 
     th {
-      background-color: #f2f2f2;
+      background-color: #eee;
     }
 
     #result {
@@ -50,8 +43,8 @@
   </style>
 </head>
 <body>
-  <h1>LINEAGE REAL 掉落查詢</h1>
-  <input type="text" id="keyword" placeholder="請輸入關鍵字 (物品或怪物)">
+  <h1>LINEAGE 掉落查詢</h1>
+  <input type="text" id="keyword" placeholder="請輸入關鍵字（備註 note）">
   <button onclick="search()">查詢</button>
 
   <div id="result"></div>
@@ -67,18 +60,13 @@
       const resultDiv = document.getElementById("result");
       resultDiv.innerHTML = "查詢中...";
 
-      let query = supabase
+      const { data, error } = await supabase
         .from("droplist")
-        .select("*");
-
-      if (keyword !== "") {
-        query = query.or(`item_name.ilike.%${keyword}%,monster_name.ilike.%${keyword}%`);
-      }
-
-      const { data, error } = await query;
+        .select("*")
+        .ilike("note", `%${keyword}%`);
 
       if (error) {
-        resultDiv.innerHTML = "<p style='color: red;'>查詢失敗，請稍後再試。</p>";
+        resultDiv.innerHTML = "<pre style='color:red;'>" + JSON.stringify(error, null, 2) + "</pre>";
         console.error(error);
         return;
       }
@@ -88,18 +76,20 @@
         return;
       }
 
-      let html = "<table><tr><th>物品名稱</th><th>怪物名稱</th><th>掉落機率 (%)</th></tr>";
+      let html = "<table><tr><th>怪物ID</th><th>物品ID</th><th>掉落數量</th><th>掉落率</th><th>備註</th></tr>";
       data.forEach(row => {
         html += `<tr>
-                   <td>${row.item_name}</td>
-                   <td>${row.monster_name}</td>
-                   <td>${row.drop_rate ?? "—"}</td>
+                   <td>${row.mobid}</td>
+                   <td>${row.itemid}</td>
+                   <td>${row.min} - ${row.max}</td>
+                   <td>${row.chance}%</td>
+                   <td>${row.note ?? ""}</td>
                  </tr>`;
       });
       html += "</table>";
-
       resultDiv.innerHTML = html;
     }
   </script>
 </body>
 </html>
+
