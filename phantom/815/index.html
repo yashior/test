@@ -91,10 +91,10 @@
       // 3️⃣ 顯示查詢結果
       let html = "<table><tr><th>怪物名稱</th><th>物品ID</th><th>掉落率</th><th>備註</th></tr>";
       dropData.forEach(row => {
-        const mobName = npcMap.get(String(row.mobid)) || `ID:${row.mobid}`;
+        const mobName = npcMap.get(String(row.mobId)) || `ID:${row.mobId}`;
         html += `<tr>
                    <td>${mobName}</td>
-                   <td>${row.itemid}</td>
+                   <td>${row.itemId}</td>
                    <td>${(row.chance / 10000).toFixed(2)}%</td>
                    <td>${row.note ?? ""}</td>
                  </tr>`;
