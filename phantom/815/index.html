@@ -84,14 +84,14 @@
       const npcMap = new Map();
       if (npcData) {
         npcData.forEach(npc => {
-          npcMap.set(npc.npcid, npc.name);
+          npcMap.set(String(npc.npcid), npc.name);
         });
       }
 
       // 3️⃣ 顯示查詢結果
       let html = "<table><tr><th>怪物名稱</th><th>物品ID</th><th>掉落率</th><th>備註</th></tr>";
       dropData.forEach(row => {
-        const mobName = npcMap.get(row.mobid) || `ID:${row.mobid}`;
+        const mobName = npcMap.get(String(row.mobid)) || `ID:${row.mobid}`;
         html += `<tr>
                    <td>${mobName}</td>
                    <td>${row.itemid}</td>
