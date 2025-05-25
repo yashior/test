@@ -81,8 +81,12 @@
         html += `<tr>
                    <td>${row.mobid}</td>
                    <td>${row.itemid}</td>
+                   <!--
+                   <tr>
                    <td>${row.min} - ${row.max}</td>
-                   <td>${row.chance}%</td>
+                   </tr>
+                   -->
+                   <td>${(row.chance / 10000).toFixed(2)}%</td>
                    <td>${row.note ?? ""}</td>
                  </tr>`;
       });
