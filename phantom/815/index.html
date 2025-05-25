@@ -91,7 +91,7 @@
       // 3️⃣ 顯示查詢結果
       let html = "<table><tr><th>怪物名稱</th><th>物品ID</th><th>掉落率</th><th>備註</th></tr>";
       dropData.forEach(row => {
-        const mobName = npcMap.get(String(row.mobId)) || `ID:${row.mobId}`;
+        const mobName = npcMap.get(String(row.mobId)) || (row.note?.split("=>")[0] || `ID:${row.mobId}`);
         html += `<tr>
                    <td>${mobName}</td>
                    <td>${row.itemId}</td>
