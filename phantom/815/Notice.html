@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>公告列表</title>
+  <style>
+    body {
+      background-color: #111;
+      font-family: "微軟正黑體", sans-serif;
+      color: #fff;
+      padding: 20px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 20px;
+      border-bottom: 1px solid #666;
+      margin-bottom: 15px;
+    }
+
+    .tabs div {
+      padding: 10px 15px;
+      cursor: pointer;
+      color: #ccc;
+    }
+
+    .tabs div:hover,
+    .tabs .active {
+      color: #fff;
+      border-bottom: 2px solid orange;
+    }
+
+    .notice-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .notice-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px dotted #444;
+      font-size: 15px;
+    }
+
+    .notice-title {
+      color: #eee;
+      cursor: pointer;
+    }
+
+    .notice-title:hover {
+      color: #ffcc00;
+    }
+
+    .notice-date {
+      color: #aaa;
+      font-size: 13px;
+      white-space: nowrap;
+      padding-left: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="tabs">
+    <div class="active">最新</div>
+    <div>遊戲</div>
+    <div>公告</div>
+    <div>活動</div>
+    <div style="margin-left:auto;">more</div>
+  </div>
+
+  <ul class="notice-list">
+    <li class="notice-item">
+      <div class="notice-title">[重要公告] 測試</div>
+      <div class="notice-date">05-26</div>
+    </li>
+    <li class="notice-item">
+      <div class="notice-title">[活動列表]測試</div>
+      <div class="notice-date">05-14</div>
+    </li>
+    <li class="notice-item">
+      <div class="notice-title">[重要公告] 測試</div>
+      <div class="notice-date">05-24</div>
+    </li>
+    <li class="notice-item">
+      <div class="notice-title">[重要公告] 測試</div>
+      <div class="notice-date">05-23</div>
+    </li>
+    <li class="notice-item">
+      <div class="notice-title">[活動列表] 測試</div>
+      <div class="notice-date">05-23</div>
+    </li>
+    <li class="notice-item">
+      <div class="notice-title">[重要公告] 測試</div>
+      <div class="notice-date">05-22</div>
+    </li>
+    <li class="notice-item">
+      <div class="notice-title">[特殊道具] 測試</div>
+      <div class="notice-date">05-22</div>
+    </li>
+    <li class="notice-item">
+      <div class="notice-title">[遊戲下載] 測試</div>
+      <div class="notice-date">05-20</div>
+    </li>
+    <li class="notice-item">
+      <div class="notice-title">[遊戲下載] 測試</div>
+      <div class="notice-date">05-20</div>
+    </li>
+  </ul>
+
+</body>
+</html>
