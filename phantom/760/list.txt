@@ -1,1 +1,5 @@
+[update]
+ver=7.60c
+url=https://yashior.github.io/test/phantom/760/list.txt
+[list]
 
