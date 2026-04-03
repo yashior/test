@@ -76,17 +76,7 @@
         return;
       }
 
-      // 2️⃣ 查詢 npc 對照表
-      const { data: npcData, error: npcError } = await supabase
-        .from("npc")
-        .select("npcid, name");
-
-      const npcMap = new Map();
-      if (npcData) {
-        npcData.forEach(npc => {
-          npcMap.set(String(npc.npcid), npc.name);
-        });
-      }
+     
 
       // 3️⃣ 顯示查詢結果
       let html = "<table><tr><th>怪物名稱</th><th>物品ID</th><th>掉落率</th><th>備註</th></tr>";
