@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>LINEAGE 掉落查詢</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body {
       font-family: "Microsoft JhengHei", sans-serif;
@@ -50,7 +50,7 @@
   <div id="result"></div>
 
   <script>
-const supabase = window.supabase.createClient(
+const client = supabase.createClient(
   "https://ducspermqjjfxoghavmf.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1Y3NwZXJtcWpqZnhvZ2hhdm1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5NDE4NTEsImV4cCI6MjA4ODUxNzg1MX0.uVFVECd76WMzcyqcmnAk2I9uBIuaE54Wgl_pePHqKd4"
 );
@@ -66,7 +66,7 @@ async function search() {
 
   resultDiv.innerHTML = "查詢中...";
 
-  const { data, error } = await supabase
+  const { data, error } = await client
     .from("droplist")
     .select("*")
     .or(`mobId.ilike.%${keyword}%,itemId.ilike.%${keyword}%`);
@@ -97,5 +97,6 @@ async function search() {
   resultDiv.innerHTML = html;
 }
 </script>
+
 </body>
 </html>
