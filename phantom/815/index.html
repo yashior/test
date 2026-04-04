@@ -50,48 +50,52 @@
   <div id="result"></div>
 
   <script>
-    const supabase = window.supabase.createClient(
-      "https://ducspermqjjfxoghavmf.supabase.co",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1Y3NwZXJtcWpqZnhvZ2hhdm1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5NDE4NTEsImV4cCI6MjA4ODUxNzg1MX0.uVFVECd76WMzcyqcmnAk2I9uBIuaE54Wgl_pePHqKd4"
-    );
+const supabase = window.supabase.createClient(
+  "https://ducspermqjjfxoghavmf.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1Y3NwZXJtcWpqZnhvZ2hhdm1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5NDE4NTEsImV4cCI6MjA4ODUxNzg1MX0.uVFVECd76WMzcyqcmnAk2I9uBIuaE54Wgl_pePHqKd4"
+);
 
-    async function search() {
-      const keyword = document.getElementById("keyword").value.trim();
-      const resultDiv = document.getElementById("result");
-      resultDiv.innerHTML = "查詢中...";
+async function search() {
+  const keyword = document.getElementById("keyword").value.trim();
+  const resultDiv = document.getElementById("result");
 
-      // 1️⃣ 查詢 droplist
-      const { data: dropData, error: dropError } = await supabase
-        .from("droplist")
-        .select("*")
-        .ilike("note", `%${keyword}%`);
+  if (!keyword) {
+    resultDiv.innerHTML = "<p>請輸入關鍵字</p>";
+    return;
+  }
 
-      if (dropError) {
-        resultDiv.innerHTML = "<pre style='color:red;'>" + JSON.stringify(dropError, null, 2) + "</pre>";
-        return;
-      }
+  resultDiv.innerHTML = "查詢中...";
 
-      if (dropData.length === 0) {
-        resultDiv.innerHTML = "<p>查無資料</p>";
-        return;
-      }
+  const { data, error } = await supabase
+    .from("droplist")
+    .select("*")
+    .or(`mobId.ilike.%${keyword}%,itemId.ilike.%${keyword}%`);
 
-     
+  if (error) {
+    resultDiv.innerHTML = "<pre style='color:red;'>" + JSON.stringify(error, null, 2) + "</pre>";
+    return;
+  }
 
-      // 3️⃣ 顯示查詢結果
-      let html = "<table><tr><th>怪物名稱</th><th>物品ID</th><th>掉落率</th><th>備註</th></tr>";
-      dropData.forEach(row => {
-        const mobName = npcMap.get(String(row.mobId)) || (row.note?.split("=>")[0] || `ID:${row.mobId}`);
-        html += `<tr>
-                   <td>${mobName}</td>
-                   <td>${row.itemId}</td>
-                   <td>${(row.chance / 10000).toFixed(2)}%</td>
-                   <td>${row.note ?? ""}</td>
-                 </tr>`;
-      });
-      html += "</table>";
-      resultDiv.innerHTML = html;
-    }
-  </script>
+  if (!data || data.length === 0) {
+    resultDiv.innerHTML = "<p>查無資料</p>";
+    return;
+  }
+
+  let html = "<table border='1'><tr><th>怪物</th><th>物品</th><th>掉落率</th><th>備註</th></tr>";
+
+  data.forEach(row => {
+    html += `<tr>
+      <td>${row.mobId}</td>
+      <td>${row.itemId}</td>
+      <td>${(Number(row.chance) / 10000).toFixed(2)}%</td>
+      <td>${row.note ?? ""}</td>
+    </tr>`;
+  });
+
+  html += "</table>";
+
+  resultDiv.innerHTML = html;
+}
+</script>
 </body>
 </html>
